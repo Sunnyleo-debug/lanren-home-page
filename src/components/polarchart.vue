@@ -61,6 +61,7 @@ export default {
               label: 'Skill Points',
               data: this.skillPoints,
               backgroundColor: gradient,
+              fill: false,
               borderColor: 'rgba(124, 255, 178, 0.95)',
               borderWidth: 2,
               pointBackgroundColor: [

@@ -39,7 +39,7 @@
                 thumb-label="always"
             ></v-slider>
             
-            <div style="display: flex;justify-content: center;align-items: center;">
+            <div class="settings-actions">
                 <v-btn :loading="loading1" variant="tonal" class="ma-2" @click="redefault()">恢复 / Reset</v-btn>
                 <v-btn variant="tonal" class="ma-2" @click="cancel()">取消 / Cancel</v-btn>
                 <v-btn :loading="loading2" variant="tonal" class="ma-2" @click="submitdata()">确认 / Apply</v-btn>
@@ -154,3 +154,32 @@ export default {
 };
 
 </script>
+
+<style scoped>
+.settings-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.settings-actions .v-btn {
+    margin: 0 !important;
+    min-width: 118px;
+}
+
+@media (max-width: 600px) {
+    .settings-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .settings-actions .v-btn {
+        width: 100%;
+        min-width: 0;
+    }
+}
+</style>

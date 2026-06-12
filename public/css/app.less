@@ -4,6 +4,14 @@
     color: var(--leleo-vcard-color);
 }
 
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 .vapp-fullscreen-background {
     position: fixed;
     background-color: #282c34;
@@ -48,6 +56,33 @@
         justify-content: center; 
         align-items: center; 
     }
+
+    .site-shell {
+        position: relative;
+        z-index: 2;
+        height: 100vh;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(221, 247, 255, 0.32) rgba(8, 14, 28, 0.32);
+    }
+
+    .site-shell::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .site-shell::-webkit-scrollbar-track {
+        background: rgba(8, 14, 28, 0.32);
+    }
+
+    .site-shell::-webkit-scrollbar-thumb {
+        background: rgba(221, 247, 255, 0.32);
+        border-radius: 999px;
+    }
+
     .fade-enter-active, .fade-leave-active { 
         transition: opacity .8s
       }
@@ -55,71 +90,164 @@
         opacity: 0  
     }
 
-    .leleo-left{
-        height: 100vh;
+    .floating-settings {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 130;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        &-welcome{
-            margin-top: 10px;
-            width: 100%;
-            color: var(--leleo-welcomtitle-color);
-            padding: 0 2rem;
-            font-family: "myfont";
-        }
-        &-avatar{
-            .musicplayer{
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                display: flex;
-                justify-content: space-evenly;
-                align-items: center;
-            }
-            .musicplayer-text{
-                position: absolute;
-                font-size: 12px;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-            .leleo-spin {
-                animation: spin 6s linear infinite;
-            }
-            .loading-spinner {
-                position: absolute;
-                 top: 50%;
-                left: 50%;
-                 transform: translate(-50%, -50%); 
-                z-index: 1; 
-            }
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-            .fade-in {
-                animation: fadeIn .6s ease ;
-              }
-              
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-        }
-        &-socialIconsContainer{
-            .leleo-social-bticon:hover{
-                transform: scale(1.2);
-            }
-        }
+        align-items: flex-start;
+        gap: 10px;
     }
-    .clock-font{
-        font-family: "digitalfont";
+
+    .floating-settings__button {
+        width: 48px;
+        height: 48px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    .floating-settings__panel {
+        width: min(258px, calc(100vw - 40px));
+        padding: 10px;
+        border: 1px solid rgba(221, 247, 255, 0.18);
+        border-radius: 16px;
+        background: rgba(8, 14, 28, 0.72);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+    }
+
+    .floating-settings__option {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .floating-settings__option + .floating-settings__option {
+        margin-top: 6px;
+    }
+
+    .floating-settings__option:hover {
+        border-color: rgba(124, 255, 178, 0.36);
+        background: rgba(124, 255, 178, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .floating-settings__option .v-icon {
+        flex: 0 0 auto;
+        color: var(--leleo-vcard-color);
+    }
+
+    .floating-settings__option span {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .floating-settings__option strong {
+        font-size: 13px;
+        line-height: 1.2;
+        font-weight: 900;
+    }
+
+    .floating-settings__option small {
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 11px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    .settings-dialog__card {
+        max-height: min(760px, calc(100vh - 40px));
+        overflow: hidden;
+        border: 1px solid rgba(221, 247, 255, 0.16);
+        background: rgba(8, 14, 28, 0.78) !important;
+        backdrop-filter: blur(18px);
+    }
+
+    .settings-dialog__card .v-window {
+        max-height: calc(100vh - 150px);
+        overflow-y: auto;
+    }
+
+    .settings-dialog__card .v-tabs {
+        overflow-x: auto;
+    }
+
+    .settings-dialog__card .v-tabs::-webkit-scrollbar {
+        height: 0;
+    }
+
+    .floating-music {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 120;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .floating-music__panel {
+        width: min(292px, calc(100vw - 40px));
+        padding: 12px;
+        border: 1px solid rgba(221, 247, 255, 0.18);
+        background: rgba(8, 14, 28, 0.48) !important;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    }
+
+    .floating-music__meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .floating-music__text {
+        min-width: 0;
+    }
+
+    .floating-music__title,
+    .floating-music__author {
+        max-width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .floating-music__title {
+        color: #fff;
+        font-size: 13px;
         font-weight: 800;
+    }
+
+    .floating-music__author {
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 11px;
+        margin-top: 2px;
+    }
+
+    .floating-music__controls {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .floating-music__button {
+        width: 44px;
+        height: 44px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
 }
   
@@ -139,4 +267,45 @@
 }
 .vapp-fullscreen-background.radius-before::before{
     border-radius: 16px;
+}
+
+@media (max-width: 960px) {
+    .vapp-fullscreen-background {
+        .floating-settings {
+            left: 12px;
+            bottom: 12px;
+        }
+
+        .floating-settings__button {
+            width: 44px;
+            height: 44px;
+        }
+
+        .floating-settings__panel {
+            width: min(260px, calc(100vw - 24px));
+        }
+
+        .settings-dialog__card .v-tabs {
+            justify-content: flex-start;
+        }
+
+        .settings-dialog__card .v-tab {
+            min-width: max-content;
+            padding-inline: 12px;
+        }
+
+        .floating-music {
+            right: 12px;
+            bottom: 58px;
+        }
+
+        .floating-music__panel {
+            width: min(272px, calc(100vw - 24px));
+        }
+
+        .floating-music__title,
+        .floating-music__author {
+            max-width: 190px;
+        }
+    }
 }

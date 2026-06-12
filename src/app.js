@@ -1,10 +1,8 @@
 import homeright from '../src/components/hoemright.vue';
-import typewriter from './components/typewriter.vue';
 import tab1 from './components/tabs/tab1.vue';
 import tab2 from './components/tabs/tab2.vue';
 import tab3 from './components/tabs/tab3.vue';
 import loader from './components/loader.vue';
-import polarchart from './components/polarchart.vue';
 import config from './config.js';
 import { getCookie } from './utils/cookieUtils.js';
 import { setMeta,getFormattedTime,getFormattedDate,dataConsole } from './utils/common.js';
@@ -12,7 +10,7 @@ import { useDisplay } from 'vuetify'
 
 export default {
   components: {
-    tab1,tab2,tab3,loader,homeright,typewriter,polarchart
+    tab1,tab2,tab3,loader,homeright
   },
   setup() {
     const { xs,sm,md } = useDisplay();
@@ -27,17 +25,16 @@ export default {
       configdata: config,
       dialog1: false,
       dialog2: false,
-      personalizedtags: null,
+      settingsPanelOpen: false,
       videosrc: '',
       videoType: 'video/mp4',
-      ismusicplayer: false,
+      isFloatingMusicOpen: false,
       isPlaying:false,
       playlistIndex: 0,
       audioLoading: false,
       musicinfo: null,
       musicinfoLoading:false,
       lyrics:{},
-      socialPlatformIcons: null,
       isExpanded: false,
       stackicons:[
         {icon:"mdi-vuejs",color:"green", model: false,tip: 'vue'},
@@ -75,8 +72,7 @@ export default {
     if(import.meta.env.VITE_CONFIG){
       this.configdata = JSON.parse(import.meta.env.VITE_CONFIG);
     }
-    this.projectcards = this.configdata.projectcards;this.socialPlatformIcons = this.configdata.socialPlatformIcons;
-    this.personalizedtags = this.configdata.tags;
+    this.projectcards = this.configdata.projectcards;
     this.isloading = true;
     let imageurl = "";
     this.dataConsole();
@@ -192,7 +188,7 @@ export default {
 
   computed: {
     currentSong() {
-      return this.musicinfo[this.playlistIndex];
+      return this.musicinfo?.[this.playlistIndex] || {};
     },
     audioPlayer() {
       return this.$refs.audioPlayer;
@@ -201,17 +197,6 @@ export default {
   
   methods: {
     getCookie,setMeta,getFormattedTime,getFormattedDate,dataConsole,
-
-    getRandomDynamicWallpaper(isMobile){
-      const wallpaperType = isMobile ? 'videoMobile' : 'video';
-      const wallpapers = this.configdata.wallpaper?.[wallpaperType] || [];
-      const localWallpapers = wallpapers.filter(item => item?.url?.startsWith('/'));
-      const availableWallpapers = localWallpapers.length ? localWallpapers : wallpapers.filter(item => item?.url);
-      if(!availableWallpapers.length){
-        return null;
-      }
-      return availableWallpapers[Math.floor(Math.random() * availableWallpapers.length)];
-    },
 
     getVideoType(url){
       if(url?.toLowerCase().endsWith('.webm')){
@@ -251,12 +236,6 @@ export default {
       }
   
       const { xs } = useDisplay();
-      const randomDynamicWallpaper = this.getRandomDynamicWallpaper(xs.value);
-      if(randomDynamicWallpaper){
-        this.setBackgroundVideo(randomDynamicWallpaper.url);
-        return imageurl;
-      }
-
       let leleodatabackground = this.getCookie("leleodatabackground");
       if(leleodatabackground){
         if(xs.value){
@@ -309,6 +288,17 @@ export default {
     handleCancel(){
       this.dialog1 = false;
     },
+    toggleSettingsPanel(){
+      this.settingsPanelOpen = !this.settingsPanelOpen;
+    },
+    openSettingsDialog(){
+      this.settingsPanelOpen = false;
+      this.dialog1 = true;
+    },
+    openAboutDialog(){
+      this.settingsPanelOpen = false;
+      this.dialog2 = true;
+    },
     jump(url){
       window.open(url, '_blank').focus();
     },
@@ -328,8 +318,8 @@ export default {
       }
       
     },
-    musicplayershow(val) {
-        this.ismusicplayer = val;
+    toggleFloatingMusic(){
+      this.isFloatingMusicOpen = !this.isFloatingMusicOpen;
     },
 
     setupAudioListener() {
@@ -337,6 +327,12 @@ export default {
     },
 
     togglePlay() {
+      if(!this.currentSong?.url){
+        return;
+      }
+      if(!this.audioPlayer.src){
+        this.audioPlayer.src = this.currentSong.url;
+      }
       if (!this.isPlaying) {
         this.audioPlayer.play();
         this.isVdMuted = true;
@@ -347,19 +343,28 @@ export default {
       this.isPlaying = !this.musicinfoLoading && !this.isPlaying;
     },
     previousTrack() {
+      if(!this.musicinfo?.length){
+        return;
+      }
       this.playlistIndex = this.playlistIndex > 0 ? this.playlistIndex - 1 : this.musicinfo.length - 1;
       this.updateAudio();
     },
     nextTrack() {
+      if(!this.musicinfo?.length){
+        return;
+      }
       this.playlistIndex = this.playlistIndex < this.musicinfo.length - 1 ? this.playlistIndex + 1 : 0;
       this.updateAudio();
     },
     updateAudio() {
+      if(!this.currentSong?.url){
+        return;
+      }
       this.audioPlayer.src = this.currentSong.url;
-      this.$refs.audiotitle.innerText = this.currentSong.title;
-      this.$refs.audioauthor.innerText = this.currentSong.author;
       this.isPlaying = true;
-      this.audioPlayer.play();
+      this.audioPlayer.play?.().catch(() => {
+        this.isPlaying = false;
+      });
     },
     updateCurrentIndex(index) {
       this.playlistIndex = index;

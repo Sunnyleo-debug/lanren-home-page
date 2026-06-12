@@ -1,6 +1,6 @@
 <template>
-  <v-app class="vapp-fullscreen-background" style="overflow: hidden;" :class="{ 'radius-before': !xs }"
-  :style="xs?{height: '100%',width: '100%',top: '0',left:'0'}:(sm?{height: '98%',width: '98%',top: '1%',left:' 1%'}:{height: '96.6%',width: '99%',top: '1.7%',left:' 0.5%'})">
+  <v-app class="vapp-fullscreen-background" style="overflow: hidden;"
+  :style="{height: '100%',width: '100%',top: '0',left:'0'}">
     <transition name="fade">
       <div class="loading" v-show="isloading">
         <loader></loader>
@@ -8,7 +8,7 @@
     </transition>
 
     <video autoplay loop muted class="video-bg" id="bg-video" ref="VdPlayer"
-    :style="xs?{height: '100%',width: '100%',top: '0',left:'0'}:(sm?{height: '98%',width: '98%',top: '1%',left:' 1%','border-radius': '16px'}:{height: '96.6%',width: '99%',top: '1.7%',left:' 0.5%','border-radius': '16px',})">
+    :style="{height: '100%',width: '100%',top: '0',left:'0'}">
         <source :src="videosrc" :type="videoType">
     </video>
 
@@ -22,105 +22,80 @@
         @mouseleave="collapseSwitch"
       ></v-switch>
     </div>
+
+    <div v-show="!isloading && !isClearScreen" class="floating-music">
+      <transition name="slide-y-transition">
+        <v-card v-show="isFloatingMusicOpen" class="floating-music__panel" variant="tonal">
+          <div class="floating-music__meta">
+            <v-avatar :image="currentSong?.pic" size="42"></v-avatar>
+            <div class="floating-music__text">
+              <div class="floating-music__title">{{ currentSong?.title || 'Music' }}</div>
+              <div class="floating-music__author">{{ currentSong?.author || '网易云歌单 / NetEase' }}</div>
+            </div>
+          </div>
+          <div class="floating-music__controls">
+            <v-btn icon="mdi-skip-previous" size="small" variant="tonal" @click="previousTrack"></v-btn>
+            <v-btn :icon="isPlaying ? 'mdi-pause' : 'mdi-play'" size="small" variant="tonal" @click="togglePlay"></v-btn>
+            <v-btn icon="mdi-skip-next" size="small" variant="tonal" @click="nextTrack"></v-btn>
+          </div>
+        </v-card>
+      </transition>
+      <v-btn
+        class="floating-music__button"
+        :icon="isFloatingMusicOpen ? 'mdi-chevron-down' : 'mdi-music-note'"
+        color="var(--leleo-vcard-color)"
+        variant="tonal"
+        @click="toggleFloatingMusic"
+      ></v-btn>
+    </div>
+
+    <audio v-show="false" ref="audioPlayer" preload="none"
+      @waiting="onWaiting"
+      @canplay="onCanPlay">
+    </audio>
     
-    <div v-show="!isloading && !isClearScreen" :style="xs||sm?{'overflow-y': 'auto','overflow-x': 'hidden'}:{}">
-        <v-row>
-            <v-col cols="12" md="4" lg="3" class="leleo-left" align="center">
-              <div :style="xs||sm?{'font-size':'2.3rem'}:{'display':'none'}" class="leleo-left-welcome">{{ configdata.welcometitle }}</div>  
-              <v-avatar class="leleo-left-avatar" :size="xs||sm?120:140" :style="xs||sm?{'margin-top': '0'}:{'margin-top': '2rem'}" @mouseenter="musicplayershow(1)" @mouseleave="musicplayershow(0)">
-                  <v-img :class="{'leleo-spin':isPlaying}"
-                  alt="Lanren"
-                  :src=configdata.avatar
-                  ></v-img>
-                  <!-- 由于当ismusicplayer显示后，fadein无效果，所以需要设置一个过渡动画 -->
-                  <transition name="fade">
-                  <v-card v-show="ismusicplayer" class="musicplayer" :class="{'fade-in':ismusicplayer}" variant="tonal">
-                      <div v-if="audioLoading" class="loading-spinner">
-                          <v-progress-circular indeterminate></v-progress-circular>
-                      </div>
-                      <span ref="audiotitle" class="musicplayer-text"
-                        style="top: 1.6rem;font-weight: bolder;"
-                      >{{ musicinfo?.[0]?.title }}</span>
-                      <span ref="audioauthor" class="musicplayer-text"
-                        style="bottom: 1.4rem;"
-                      >{{ musicinfo?.[0]?.author }}</span>
-                      <audio v-show="false" ref="audioPlayer" preload="none"
-                      @waiting="onWaiting"
-                      @canplay="onCanPlay">
-                      </audio>
-                      <v-btn :size="xs||sm?22:30" color="#999999" icon @click="previousTrack()">
-                      <v-icon>mdi-skip-previous</v-icon>
-                      </v-btn>
-                      <v-btn :size="xs||sm?35:48" color="#999999" icon @click="togglePlay()">
-                      <v-icon>{{ isPlaying? 'mdi-pause' : 'mdi-play' }}</v-icon>
-                      </v-btn>
-                      <v-btn :size="xs||sm?22:30" color="#999999" icon @click="nextTrack()">
-                      <v-icon>mdi-skip-next</v-icon>
-                      </v-btn>
-                  </v-card>
-                  </transition>
-                </v-avatar>
+    <div v-show="!isloading && !isClearScreen" class="site-shell">
+      <homeright :configdata=configdata :formattedTime=formattedTime 
+      :formattedDate=formattedDate :projectcards=projectcards></homeright>
+    </div>
 
-                <v-card class="ma-5 pa-2 leleo-left-card" variant="tonal" :max-width="xs?270:300" style="text-align: center;">
-                    <template v-slot:title>
-                    <span>标签 / Tags</span>
-                    </template>
-                    <v-chip v-for="item in personalizedtags" density="compact" link class="ma-1" size="small">
-                    {{item}}
-                    </v-chip>
-                </v-card>
-
-                <div class="leleo-left-chart">
-                    <polarchart :style="xs||sm?{'height':'210px'}:{'height':'270px'}"/>
-                </div>
-
-                <v-container class="leleo-left-socialIconsContainer">
-                    <v-row align="center" justify="center">
-                    <v-col class="pa-1" cols="auto" v-for="item in socialPlatformIcons">
-                        <v-btn :size="xs?25:33" variant="tonal" color="var(--leleo-vcard-color)"
-                        class="ma-1 leleo-social-bticon"
-                        icon
-                        :href="item.link" target="_blank"
-                        >
-                    <v-icon :icon=item.icon :size="xs?20:25" class="social-bticon-icon"></v-icon></v-btn>
-                    </v-col>
-                    </v-row>
-
-                    <v-row align="center" justify="center" class="setting">
-                    <v-col class="ma-1" cols="auto">
-                        <v-speed-dial
-                            :location="xs||sm ?'top center':'right center'"
-                            transition="slide-y-transition"
-                        >
-                        <template v-slot:activator="{ props: activatorProps }">
-                            <v-fab style="width: 2.5rem;height: 2.5rem;" color="var(--leleo-vcard-color)"
-                            variant="tonal"
-                            v-bind="activatorProps"
-                            icon="mdi-cog"
-                            ></v-fab>
-                        </template>
-                        <v-btn variant="tonal" class="setbtn" key="1" icon="mdi-key-chain" @click="dialog1 = true" size="31" color="var(--leleo-vcard-color)"></v-btn>
-                        <v-btn variant="tonal" class="setbtn" key="2" icon="mdi-information" @click="dialog2 = true" size="31" color="var(--leleo-vcard-color)"></v-btn>
-                        <v-btn variant="tonal" class="setbtn" key="3" icon="$error" size="31" color="var(--leleo-vcard-color)"></v-btn>
-                        </v-speed-dial>
-                    </v-col>
-                    </v-row>
-                </v-container>
-            </v-col>
-
-            <v-col cols="12" md="8" lg="9" style="height: 100vh;" :style="xs||sm ?{}:{'overflow': 'auto'}">
-                <homeright :configdata=configdata :formattedTime=formattedTime 
-                :formattedDate=formattedDate :projectcards=projectcards></homeright>
-            </v-col>
-        </v-row>
+    <div v-show="!isloading && !isClearScreen" class="floating-settings" :class="{ 'is-open': settingsPanelOpen }">
+      <transition name="slide-y-transition">
+        <div v-show="settingsPanelOpen" class="floating-settings__panel">
+          <button class="floating-settings__option" type="button" @click="openSettingsDialog">
+            <v-icon icon="mdi-tune-variant" size="20"></v-icon>
+            <span>
+              <strong>设置 / Settings</strong>
+              <small>样式、壁纸、音乐</small>
+            </span>
+          </button>
+          <button class="floating-settings__option" type="button" @click="openAboutDialog">
+            <v-icon icon="mdi-information-outline" size="20"></v-icon>
+            <span>
+              <strong>关于 / About</strong>
+              <small>技术栈和说明</small>
+            </span>
+          </button>
+        </div>
+      </transition>
+      <v-btn
+        class="floating-settings__button"
+        :icon="settingsPanelOpen ? 'mdi-close' : 'mdi-cog'"
+        color="var(--leleo-vcard-color)"
+        variant="tonal"
+        :aria-expanded="settingsPanelOpen"
+        aria-label="Open settings"
+        @click.stop="toggleSettingsPanel"
+      ></v-btn>
     </div>
 
     <v-dialog
         v-model="dialog1"
-        width="1000"
-        heihght="700"
+        :width="xs || sm ? 'calc(100vw - 24px)' : 1000"
+        max-width="1000"
+        class="settings-dialog"
       >
-      <v-card elevation="3" style="backdrop-filter: blur(10px);">
+      <v-card class="settings-dialog__card" elevation="3">
         <v-tabs
           v-model="tab"
           :items="tabs"
@@ -162,8 +137,8 @@
 
       <v-dialog
         v-model="dialog2"
-        width="700"
-        heihght="500"
+        :width="xs || sm ? 'calc(100vw - 24px)' : 700"
+        max-width="700"
       >
       <v-card class="ma-3 pa-2" hover
           variant="tonal"
@@ -258,5 +233,4 @@
 <script src="./app.js"></script>
 <style scoped>
   @import url(/css/app.less);
-  @import url(/css/mobile.less);
 </style>

@@ -22,7 +22,7 @@ const config = {
 	blur: 12,
 
 	// 我的标签
-	tags: ['AI', '编程 Coding', '创业 Startup', 'dreamcar', '生活 Life', '赚钱 Earn'],
+	tags: ['AI', 'AI 工具开发', '编程 Coding', '考研 Learning', '创业 Startup', 'dreamcar'],
 
 	// 默认背景壁纸
 	background: {
@@ -48,6 +48,29 @@ const config = {
 	polarChart: {
 		skills: ['Java', 'Python', 'C/C++', 'MySQL', 'HTML', 'AI Tools', 'GitHub'],
 		skillPoints: [76, 72, 68, 70, 64, 82, 74],
+	},
+
+	brandProfile: {
+		title: "热爱学习，努力考上研究生 / Learning for Graduate School",
+		subtitle: "喜欢 AI 工具开发，也喜欢把想法做成能运行、能展示、能持续进步的小作品。",
+		focus: [
+			{ icon: "mdi-school-outline", label: "当前目标 / Current Goal", text: "保持学习节奏，努力考上研究生。" },
+			{ icon: "mdi-robot-outline", label: "兴趣方向 / AI Tools", text: "探索 AI 工具开发、自动化流程和个人效率产品。" },
+			{ icon: "mdi-code-tags", label: "长期路线 / Builder Path", text: "用代码积累作品，用作品证明成长。" },
+		],
+		quotes: [
+			"先把东西做出来，再把它打磨漂亮。",
+			"学习不是为了看起来努力，是为了真的拥有选择权。",
+			"把 AI、代码和行动力连起来，慢慢做出自己的路。",
+			"今天多推进一点，明天就少一点慌张。"
+		]
+	},
+
+	contact: {
+		wechat: "-408_xiaoliu",
+		email: "-408_xiaoliu",
+		github: "https://github.com/Sunnyleo-debug",
+		site: "https://lanren.me"
 	},
 
 	// 社交按钮
@@ -136,38 +159,58 @@ const config = {
 	projectcards: [
 		{
 			go: "GitHub / 查看",
-			img: "/img/project-covers/multi-agent-ops.svg",
+			img: "/img/project-covers/agent-ops-circuit.jpg",
 			title: "multi-agent-ops-system",
 			subtitle: "Python / Multi-Agent Ops",
 			text: "多 Agent 运行、协调和任务拆分实践。A hands-on project for multi-agent orchestration, coordination, and AI automation.",
 			url: "https://github.com/Sunnyleo-debug/multi-agent-ops-system",
+			status: "开发中 / Building",
+			statusColor: "#7CFFB2",
 			show: true
 		},
 		{
 			go: "GitHub / 查看",
-			img: "/img/project-covers/ai-diagram-mcp.svg",
+			img: "/img/project-covers/mcp-network-rack.jpg",
 			title: "ai-diagram-mcp",
 			subtitle: "TypeScript / MCP Tooling",
 			text: "AI 绘图和 MCP 服务方向项目。A tool-oriented project exploring AI diagrams, MCP services, and workflow integration.",
 			url: "https://github.com/Sunnyleo-debug/ai-diagram-mcp",
+			status: "探索中 / Exploring",
+			statusColor: "#00E5FF",
 			show: false
 		},
 		{
 			go: "GitHub / 查看",
-			img: "/img/project-covers/agent-review.svg",
+			img: "/img/project-covers/agent-review-code.jpg",
 			title: "agent-",
 			subtitle: "Multi-Agent Review System",
 			text: "StyleAgent、DeepReasoningAgent、SecurityAgent 并行审查，由协调器汇总。Parallel review agents with a coordinator.",
 			url: "https://github.com/Sunnyleo-debug/agent-",
+			status: "实验中 / Lab",
+			statusColor: "#FFCF5A",
+			show: false
+		},
+		{
+			go: "访问 / Visit",
+			img: "/img/project-covers/lanren-live-orbit.jpg",
+			title: "lanren.me",
+			subtitle: "Personal Homepage / Vercel",
+			text: "当前个人主页，已接入 GitHub、Vercel 和自定义域名。This personal homepage is live with GitHub, Vercel, and a custom domain.",
+			url: "https://lanren.me",
+			sourceUrl: "https://github.com/Sunnyleo-debug/lanren-home-page",
+			status: "已上线 / Live",
+			statusColor: "#7CFFB2",
 			show: false
 		},
 		{
 			go: "Profile / 主页",
-			img: "/img/project-covers/github-profile.svg",
+			img: "/img/project-covers/github-profile-space.jpg",
 			title: "Sunnyleo-debug",
 			subtitle: "GitHub Profile",
 			text: "GitHub 个人资料入口。A profile hub for projects, skills, and contact information.",
 			url: "https://github.com/Sunnyleo-debug",
+			status: "资料入口 / Profile",
+			statusColor: "#DDF7FF",
 			show: false
 		},
 	],

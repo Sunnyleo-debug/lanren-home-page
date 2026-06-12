@@ -134,7 +134,7 @@
         </v-tabs>
          <div style="text-align: center;font-size: 12px;"><span>不同壁纸会按设备响应 / Wallpapers adapt by device</span></div>
     </v-container>
-    <div class="d-flex justify-center mt-3">
+    <div class="wallpaper-actions">
         <v-btn :loading="loading1" variant="tonal" class="ma-2" @click="redefault()">恢复 / Reset</v-btn>
         <v-btn :loading="loading3" variant="tonal" class="ma-2" @click="cancel()">取消 / Cancel</v-btn>
         <v-btn :loading="loading2" variant="tonal" class="ma-2" @click="submitdata()">确认 / Apply</v-btn>
@@ -318,7 +318,6 @@ export default {
 }
 </script>
 <style scoped>
-@import url(/css/mobile.less);
 </style>
 <style scoped>
 video{
@@ -348,6 +347,20 @@ video{
     overflow-y: auto;
 }
 
+.wallpaper-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.wallpaper-actions .v-btn {
+    margin: 0 !important;
+    min-width: 118px;
+}
+
 /* 覆盖全局的滚动条样式 */
 .scroll-container::-webkit-scrollbar {
   width: 5px; /* 设置滚动条宽度 */
@@ -366,5 +379,18 @@ video{
 .selected-item {
   border-color: var(--leleo-vcard-color); /* 选中时的边框颜色 */
   box-shadow: 0 0 10px var(--leleo-vcard-color); /* 选中时的阴影 */
+}
+
+@media (max-width: 600px) {
+    .wallpaper-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .wallpaper-actions .v-btn {
+        width: 100%;
+        min-width: 0;
+    }
 }
 </style>

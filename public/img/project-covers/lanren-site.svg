@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Premium personal homepage cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071014"/>
+      <stop offset="0.48" stop-color="#13222a"/>
+      <stop offset="1" stop-color="#0a1018"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7cffb2"/>
+      <stop offset="0.55" stop-color="#00e5ff"/>
+      <stop offset="1" stop-color="#f5fbff"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#dffcff" stroke-opacity="0.055"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <circle cx="600" cy="330" r="205" fill="none" stroke="url(#accent)" stroke-width="3" stroke-opacity="0.55" filter="url(#glow)"/>
+  <circle cx="600" cy="330" r="138" fill="none" stroke="#dffcff" stroke-width="2" stroke-opacity="0.22" stroke-dasharray="18 20"/>
+  <path d="M318 430C402 312 470 390 532 278C590 174 690 182 772 280C844 366 916 328 978 230" fill="none" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-opacity="0.76" filter="url(#glow)"/>
+  <g fill="#dffcff" fill-opacity="0.1" stroke="#dffcff" stroke-opacity="0.18">
+    <rect x="104" y="112" width="244" height="112" rx="18"/>
+    <rect x="852" y="112" width="244" height="112" rx="18"/>
+    <rect x="104" y="466" width="244" height="112" rx="18"/>
+    <rect x="852" y="466" width="244" height="112" rx="18"/>
+  </g>
+  <g fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-opacity="0.7">
+    <path d="M158 154h128M158 188h78M906 154h132M906 188h82M158 508h138M158 542h92M906 508h126M906 542h72"/>
+  </g>
+  <g fill="url(#accent)" filter="url(#glow)">
+    <circle cx="318" cy="430" r="7"/>
+    <circle cx="532" cy="278" r="7"/>
+    <circle cx="772" cy="280" r="7"/>
+    <circle cx="978" cy="230" r="7"/>
+  </g>
+  <path d="M432 604h336" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-opacity="0.58"/>
+</svg>
